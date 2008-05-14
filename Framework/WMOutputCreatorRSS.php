@@ -26,7 +26,7 @@ class WMOutputCreatorRSS extends WMOutputCreatorRSSVelpon {
 	 * @return WMDomDocument
 	 **/
 	public function createOutput($encoding) {
-		$dom = $this->object->createOutput($encoding);
+		$dom = parent::createOutput($encoding);
 
 		$baselink = $_SERVER["SCRIPT_URI"];
 		if ($_SERVER["SCRIPT_URL"] !== "/") {

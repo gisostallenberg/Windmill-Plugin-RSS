@@ -27,7 +27,7 @@ class WMOutputterRSS extends WMOutputterRSSVelpon {
 			if (!WMCommonRegistry::get("wmrequest")->hasVariable("dt") ) {
 				$dt = new WMDesignTemplate(realpath(dirname(__FILE__) . "/..") . "/rss.xsl");
 			}
-			$parser = WMCommonRegistry::get("wmpluginsystem")->apply(new WMXSLParser() );
+			$parser = new WMXSLParser();
 			$xhtml = $parser->parse($this->outputDoc, $dt->getXSLT(), $ct, true);
 
 			print $xhtml->saveXML();
