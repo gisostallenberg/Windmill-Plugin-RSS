@@ -13,7 +13,8 @@
  * @author Giso Stallenberg
  * @package Windmill.Plugins.RSS
  **/
-class WMOutputCreatorRSS extends WMPlugin {
+WMCommonRegistry::get("wmpluginsystem")->loadVelponClass("WMOutputCreator", "rss");
+class WMOutputCreatorRSS extends WMOutputCreatorRSSVelpon {
 	/**
 	 * createOutput
 	 *
