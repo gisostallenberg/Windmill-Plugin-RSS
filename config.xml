@@ -1,0 +1,13 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<classes>
+	<class>
+		<name>WMOutputter</name>
+		<plugin>WMOutputterRSS</plugin>
+		<file>Framework/WMOutputterRSS.php</file>
+	</class>
+	<class>
+		<name>WMOutputCreator</name>
+		<plugin>WMOutputCreatorRSS</plugin>
+		<file>Framework/WMOutputCreatorRSS.php</file>
+	</class>
+</classes>
