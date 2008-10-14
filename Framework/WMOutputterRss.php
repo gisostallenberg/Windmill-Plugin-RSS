@@ -11,29 +11,30 @@ class WMOutputterRss extends WMOutputterRssVelpon {
 	/**
 	 * printOutput
 	 *
-	 * Prints the output of the request
-	 * Creating RSS is done in two steps:
-	 * - Parse with passed or default DT (preferred dt is something like a content dt)
-	 * - Parse with rss dt (first parse should make something the rss dt can figure out, rss dt looks at classnames)
-	 *
+	 * Prints the output of the request as an RSS feed
 	 * Note: UFTS are not supported in RSS feeds and disabled
 	 *
-	 * @since Thu Oct 09 2008
+	 * @since Tue Oct 14 2008
 	 * @access protected
 	 * @return void
 	 **/
 	public function printOutput(WMDesignTemplate $dt, WMContentTemplate $ct, WMCollection $ufts, $encoding) {
-		$parser = new WMXSLParser();
-		$rssable = $parser->parse($this->outputDoc, $dt->getXSLT(), $ct, true);
-		$parser = new WMXSLParser("include");
-		$designTemplateManager = new WMDesignTemplateManager();
-		$rssdt = $designTemplateManager->getTemplate("rss");
-		$rss = $parser->parse($rssable, $rssdt->getXSLT(), $ct, true);
-		
-		header("Content-type: text/xml; charset=UTF-8");
-		Header("Cache-Control: no-cache"); // IE caches XMLHttpRequest..
-		Header("Pragma: no-cache");
-		print $rss->saveXML();
+		$user = WMCommonRegistry::get("wmsession")->get("user")->getUser();
+		$os = WMCommonRegistry::get("wmserver")->getOperatingSystem()->getIdentifier();
+
+		if (WMCommonRegistry::get("wmtrigger")->hasTrigger("xml") && ($user instanceof WMLdapUser || (ini_get("windmill.error") === "0" || (!extension_loaded("windmill") && ($os === "windows") ) ) ) ) {
+			WMHeader::xmlData($this->outputDoc);
+			WMHeader::send();
+		}
+		else {
+			$parser = new WMXSLParser("include");
+			$designTemplateManager = new WMDesignTemplateManager();
+			$rssdt = $designTemplateManager->getTemplate("rss");
+			$rss = $parser->parse($this->outputDoc, $rssdt->getXSLT(), $ct, true);
+			
+			WMHeader::xmlData($rss);
+			WMHeader::send();
+		}
 	}
 
 }
