@@ -65,7 +65,7 @@
 	Add the link to the channel node
 	
 	*match* wmpage
-	*mode* rssInfoDescription
+	*mode* rssInfoLink
 	
 	Since: Fri Dec 19 2008
 	-->
@@ -113,6 +113,7 @@
 			<description>
 				<xsl:apply-templates select='contentblocks' mode='rssItemDescription'/>
 			</description>
+			<xsl:apply-templates select='contentblocks' mode='rssItemMedia'/>
 		</item>
 	</xsl:template>
 	
@@ -162,5 +163,100 @@
 		<xsl:value-of select='text'/>
 	</xsl:template>
 	<xsl:template match='contentblock' mode='rssItemDescription'/>
+	
+	<!--
+	Adds a media group to an item
+	
+	*match* contentblocks[count(contentblock[node()[@contenttype="image" or @contenttype="video"] ]) &gt; 0]
+	*mode* rssItemMedia
+	
+	Since: Fri Dec 19 2008
+	-->
+	<xsl:template match='contentblocks[count(contentblock[node()[@contenttype="image" or @contenttype="video"] ]) &gt; 0]' mode='rssItemMedia'>
+		<media:group>
+			<xsl:apply-templates select='contentblock' mode='rssItemMedia'/>
+		</media:group>
+	</xsl:template>
+	<xsl:template match='contentblocks' mode='rssItemMedia'/>
+	
+	<!--
+	Adds media to an item
+	
+	*match* contentblock[contentblocktemplate/name = "text"] | contentblock[contentblocktemplate/name = "textphoto"]
+	*mode* rssItemDescription
+	
+	Since: Fri Dec 19 2008
+	-->
+	<xsl:template match='contentblock' mode='rssItemMedia'>
+		<xsl:apply-templates select='node()' mode='rssItemMedia'/>
+	</xsl:template>
+	
+	<!--
+	Adds a media content to the media group of an item
+	
+	*match* node()[@contenttype = "image" or @contenttype = "video"]
+	*mode* rssItemMedia
+	
+	Since: Fri Dec 19 2008
+	-->
+	<xsl:template match='node()[@contenttype = "image" or @contenttype = "video"]' mode='rssItemMedia'>
+		<media:content>
+			<xsl:apply-templates select='self::node()' mode='rssItemMediaType'/>
+			<xsl:apply-templates select='self::node()' mode='rssItemMediaMedium'/>
+			<xsl:apply-templates select='self::node()' mode='rssItemMediaURL'/>
+		</media:content>
+	</xsl:template>
+	<xsl:template match='node()' mode='rssItemMedia'/>
+	
+	<!--
+	Adds the type attribute to the media content
+	
+	*match* node()[@contenttype = "image"]
+	*mode* rssItemMediaType
+	
+	Since: Fri Dec 19 2008
+	-->
+	<xsl:template match='node()[@contenttype = "image"]' mode='rssItemMediaType'>
+		<xsl:attribute name='type'>image/jpeg</xsl:attribute>
+	</xsl:template>
+	<xsl:template match='node()[@contenttype = "image" and php:function("WMString::endsWith", string(self::node() ), ".gif")]' mode='rssItemMediaType'>
+		<xsl:attribute name='type'>image/gif</xsl:attribute>
+	</xsl:template>
+	<xsl:template match='node()[@contenttype = "video"]' mode='rssItemMediaType'>
+		<xsl:attribute name='type'>image/video</xsl:attribute>
+	</xsl:template>
+	<xsl:template match='node()' mode='rssItemMediaType'/>
+	
+	<!--
+	Adds the medium attribute to the media content
+	
+	*match* node()[@contenttype = "image"]
+	*mode* rssItemMediaMedium
+	
+	Since: Fri Dec 19 2008
+	-->
+	<xsl:template match='node()[@contenttype = "image"]' mode='rssItemMediaMedium'>
+		<xsl:attribute name='medium'>image</xsl:attribute>
+	</xsl:template>
+	<xsl:template match='node()[@contenttype = "video"]' mode='rssItemMediaMedium'>
+		<xsl:attribute name='medium'>video</xsl:attribute>
+	</xsl:template>
+	<xsl:template match='node()' mode='rssItemMediaMedium'/>
+	
+	<!--
+	Adds the url attribute to the media content
+	
+	*match* node()
+	*mode* rssItemMediaURL
+	
+	Since: Fri Dec 19 2008
+	-->
+	<xsl:template match='node()' mode='rssItemMediaURL'>
+		<xsl:attribute name='url'>
+			<xsl:text>http://</xsl:text>
+			<xsl:value-of select='php:function("WMXSLFunctions::getHttpHost")'/>
+			<xsl:value-of select='self::node()'/>
+		</xsl:attribute>
+	</xsl:template>
 	
 </xsl:stylesheet>
