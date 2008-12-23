@@ -30,6 +30,7 @@
 			<channel>
 				<xsl:apply-templates select='self::node()' mode='rssInfo'/>
 				<generator>Windmill RSS Generator</generator>
+				<xsl:apply-templates select='self::node()' mode='chapContent'/>
 				<xsl:apply-templates select='node()' mode='rssItem'/>
 			</channel>
 		</rss>
@@ -85,6 +86,16 @@
 	<xsl:template match='wmpage' mode='rssInfoDescription'/>
 	
 	<!--
+	Add CHAP content to the channel node
+	
+	*match* wmpage
+	*mode* chapContent
+	
+	Since: Tue Dec 23 2008
+	-->
+	<xsl:template match='wmpage' mode='chapContent'/>
+	
+	<!--
 	Adds the nodes of this node (module tagname) as item to the channel
 	
 	*match* node()
@@ -100,7 +111,7 @@
 	<!--
 	Adds nodes containing name or title as item to the channel
 	
-	*match* node()
+	*match* node()[name or title]
 	*mode* rssItem
 	
 	Since: Fri Dec 19 2008
@@ -113,6 +124,7 @@
 			<description>
 				<xsl:apply-templates select='contentblocks' mode='rssItemDescription'/>
 			</description>
+			<xsl:apply-templates select='self::node()' mode='chapContent'/>
 			<xsl:apply-templates select='contentblocks' mode='rssItemMedia'/>
 		</item>
 	</xsl:template>
@@ -165,6 +177,16 @@
 	<xsl:template match='contentblock' mode='rssItemDescription'/>
 	
 	<!--
+	Adds CHAP content to an item node
+	
+	*match* node()[name or title]
+	*mode* chapContent
+	
+	Since: Tue Dec 23 2008
+	-->
+	<xsl:template match='node()[name or title]' mode='chapContent'/>
+	
+	<!--
 	Adds a media group to an item
 	
 	*match* contentblocks[count(contentblock[node()[@contenttype="image" or @contenttype="video"] ]) &gt; 0]
@@ -210,6 +232,7 @@
 	
 	<!--
 	Adds the type attribute to the media content
+	(This kind of mime-type checking is not very good. Needs improvement, but will do for now)
 	
 	*match* node()[@contenttype = "image"]
 	*mode* rssItemMediaType
