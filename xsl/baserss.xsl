@@ -130,6 +130,28 @@
 	</xsl:template>
 	
 	<!--
+	Adds nodes containing name or title as item to the channel
+	Collection RSS
+	
+	*match* node()[@collection]
+	*mode* rssItem
+	
+	Since: Tue Dec 30 2008
+	-->
+	<xsl:template match='node()[@collection]' mode='rssItem'>
+		<item>
+			<title><xsl:value-of select='@collection'/></title>
+			<link><xsl:apply-templates select='self::node()' mode='rssItemLink'/></link>
+			<category><xsl:apply-templates select='self::node()' mode='rssItemCategory'/></category>
+			<description>
+				<xsl:apply-templates select='contentblocks' mode='rssItemDescription'/>
+			</description>
+			<xsl:apply-templates select='self::node()' mode='chapContent'/>
+			<xsl:apply-templates select='contentblocks' mode='rssItemMedia'/>
+		</item>
+	</xsl:template>
+	
+	<!--
 	Adds content to the link node of an item
 	
 	*match* node()
@@ -139,6 +161,20 @@
 	-->
 	<xsl:template match='node()' mode='rssItemLink'>
 		<xsl:apply-templates select='parent::node()/parent::node()' mode='rssInfoLink'/>
+	</xsl:template>
+	
+	<!--
+	Adds content to the link node of an item
+	Collection RSS
+	
+	*match* node()[@collection]
+	*mode* rssItemLink
+	
+	Since: Tue Dec 30 2008
+	-->
+	<xsl:template match='node()[@collection]' mode='rssItemLink'>
+		<xsl:apply-templates select='parent::node()/parent::node()' mode='rssInfoLink'/>
+		<xsl:value-of select='contentblocks/contentblock[link]/link'/>
 	</xsl:template>
 	
 	<!--
