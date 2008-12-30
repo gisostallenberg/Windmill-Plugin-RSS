@@ -106,7 +106,7 @@
 	<xsl:template match='node()' mode='rssItem'>
 		<xsl:apply-templates select='node()' mode='rssItem'/>
 	</xsl:template>
-	<xsl:template match='query | pager' mode='rssItem'/>
+	<xsl:template match='query | pager | user | aeroplane' mode='rssItem'/>
 	
 	<!--
 	Adds nodes containing name or title as item to the channel
