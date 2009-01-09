@@ -27,11 +27,11 @@ class WMOutputterRss extends WMOutputterRssVelpon {
 			WMHeader::send();
 		}
 		else {
-			$parser = new WMXSLParser("include");
+			$parser = new WMDesignTemplateXSLParser("include");
 			$designTemplateManager = new WMDesignTemplateManager();
 			$rssdt = $designTemplateManager->getTemplate("rss");
 			$rss = $parser->parse($this->outputDoc, $rssdt->getXSLT(), $ct, true);
-			
+
 			WMHeader::xmlData($rss);
 			WMHeader::send();
 		}
