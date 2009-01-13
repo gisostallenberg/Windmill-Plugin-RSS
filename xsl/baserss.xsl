@@ -48,7 +48,7 @@
 		<title><xsl:apply-templates select='self::node()' mode='rssInfoTitle'/></title>
 		<link><xsl:apply-templates select='self::node()' mode='rssInfoLink'/></link>
 		<language><xsl:value-of select='php:function("strtolower", translate(@language, "_", "-") )'/></language>
-		<copyright>Copyright (c) 2008, <xsl:value-of select='php:function("WMXSLFunctions::getHttpHost")'/></copyright>
+		<copyright>Copyright (c) <xsl:value-of select='php:function("date", "Y")'/>, <xsl:value-of select='php:function("WMXSLFunctions::getHttpHost")'/></copyright>
 		<description><xsl:apply-templates select='self::node()' mode='rssInfoDescription'/></description>
 	</xsl:template>
 	
@@ -118,7 +118,7 @@
 	-->
 	<xsl:template match='node()[name or title]' mode='rssItem'>
 		<item>
-			<title><xsl:value-of select='title | name'/></title>
+			<title><xsl:apply-templates select='self::node()' mode='rssItemTitle'/></title>
 			<link><xsl:apply-templates select='self::node()' mode='rssItemLink'/></link>
 			<category><xsl:apply-templates select='self::node()' mode='rssItemCategory'/></category>
 			<description>
@@ -130,7 +130,7 @@
 	</xsl:template>
 	
 	<!--
-	Adds nodes containing name or title as item to the channel
+	Adds nodes containing @collection as item to the channel
 	Collection RSS
 	
 	*match* node()[@collection]
@@ -140,7 +140,7 @@
 	-->
 	<xsl:template match='node()[@collection]' mode='rssItem'>
 		<item>
-			<title><xsl:value-of select='@collection'/></title>
+			<title><xsl:apply-templates select='self::node()' mode='rssItemTitle'/></title>
 			<link><xsl:apply-templates select='self::node()' mode='rssItemLink'/></link>
 			<category><xsl:apply-templates select='self::node()' mode='rssItemCategory'/></category>
 			<description>
@@ -149,6 +149,18 @@
 			<xsl:apply-templates select='self::node()' mode='chapContent'/>
 			<xsl:apply-templates select='contentblocks' mode='rssItemMedia'/>
 		</item>
+	</xsl:template>
+	
+	<!--
+	Adds content to the title node of an item
+	
+	*match* node()
+	*mode* rssItemTitle
+	
+	Since: Tue Jan 13 2009
+	-->
+	<xsl:template match='node()' mode='rssItemTitle'>
+		<xsl:value-of select='title | name | @collection'/>
 	</xsl:template>
 	
 	<!--
