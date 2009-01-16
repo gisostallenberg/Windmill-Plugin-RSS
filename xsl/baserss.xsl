@@ -294,7 +294,7 @@
 		<xsl:attribute name='type'>image/gif</xsl:attribute>
 	</xsl:template>
 	<xsl:template match='node()[@contenttype = "video"]' mode='rssItemMediaType'>
-		<xsl:attribute name='type'>image/video</xsl:attribute>
+		<xsl:attribute name='type'>video/x-flv</xsl:attribute>
 	</xsl:template>
 	<xsl:template match='node()' mode='rssItemMediaType'/>
 	
