@@ -214,13 +214,13 @@
 	<!--
 	Adds content to the description node of an item
 	
-	*match* contentblock[contentblocktemplate/name = "text"] | contentblock[contentblocktemplate/name = "textphoto"]
+	*match* contentblock[contentblocktemplate/name = "text"] | contentblock[contentblocktemplate/name = "textphoto"] | contentblock[node()[@contenttype = "richtext"] ]
 	*mode* rssItemDescription
 	
 	Since: Fri Dec 19 2008
 	-->
-	<xsl:template match='contentblock[contentblocktemplate/name = "text"] | contentblock[contentblocktemplate/name = "textphoto"]' mode='rssItemDescription'>
-		<xsl:value-of select='text'/>
+	<xsl:template match='contentblock[contentblocktemplate/name = "text"] | contentblock[contentblocktemplate/name = "textphoto"] | contentblock[node()[@contenttype = "richtext"] ]' mode='rssItemDescription'>
+		<xsl:value-of select='text | node()[@contenttype = "richtext"]'/>
 	</xsl:template>
 	<xsl:template match='contentblock' mode='rssItemDescription'/>
 	
