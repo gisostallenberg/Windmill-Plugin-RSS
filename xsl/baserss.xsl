@@ -1,11 +1,11 @@
 <?xml version='1.0'?>
 <!DOCTYPE xsl:stylesheet>
-
-<xsl:stylesheet version='1.0' 
-		xmlns:xsl='http://www.w3.org/1999/XSL/Transform'
-		xmlns:media='http://search.yahoo.com/mrss/'
-		xmlns:chap='http://www.connectholland.nl/chap/'
-		xmlns:php='http://php.net/xsl'>
+<xsl:stylesheet version='1.0'
+	xmlns:xsl='http://www.w3.org/1999/XSL/Transform'
+	xmlns:media='http://search.yahoo.com/mrss/'
+	xmlns:chap='http://www.connectholland.nl/chap/'
+	xmlns:php='http://php.net/xsl'
+	exclude-result-prefixes='php'>
 	<!--
 	Main RSS creating XSL
 	
