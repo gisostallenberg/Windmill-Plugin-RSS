@@ -19,10 +19,10 @@
 	<xsl:import href='fallback.xsl'/>
 
 	<!--
-	Output XML 
+	Output XML
 	-->
 	<xsl:output method="xml"/>
-	
+
 	<!--
 	Main wmpage template
 	*match* root wmpage
@@ -39,4 +39,4 @@
 		</rss>
 	</xsl:template>
 
-</xsl:stylesheet>	
+</xsl:stylesheet>

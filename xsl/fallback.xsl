@@ -30,14 +30,14 @@
 	Since: Tue Oct 14 2008
 	-->
 	<xsl:template name='nodeIterator'>
-		<xsl:param name='curpos'/>
+		<xsl:param name='curpos' select='0'/>
 
 		<xsl:apply-templates select='/node()/descendant::node()[$curpos]' mode='rssInfo'>
 			<xsl:with-param name='curpos' select='$curpos'/>
-		</xsl:apply-templates>	
+		</xsl:apply-templates>
 	</xsl:template>
 	<xsl:template match='node()' mode='rssInfo'>
-		<xsl:param name='curpos' select='0'/>
+		<xsl:param name='curpos'/>
 
 		<xsl:choose>
 			<xsl:when test='count(/node()/descendant::node() ) &gt; $curpos'>
@@ -50,6 +50,6 @@
 				<link/>
 				<description/>
 			</xsl:otherwise>
-		</xsl:choose>	
+		</xsl:choose>
 	</xsl:template>
 </xsl:stylesheet>
