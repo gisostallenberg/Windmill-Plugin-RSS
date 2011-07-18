@@ -263,6 +263,18 @@
 	</xsl:template>
 
 	<!--
+	Adds media items under a contentgroup
+
+	*match* node()[@contenttype = "group"]"
+	*mode* rssItemMedia
+
+	Since: Mon Jul 18 2011
+	-->
+	<xsl:template match='node()[@contenttype = "group"]' mode='rssItemMedia'>
+		<xsl:apply-templates select='node()' mode='rssItemMedia'/>
+	</xsl:template>
+
+	<!--
 	Adds a media content to the media group of an item
 
 	*match* node()[@contenttype = "image" or @contenttype = "video"]
