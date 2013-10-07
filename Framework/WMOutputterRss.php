@@ -7,7 +7,9 @@
  * @package Windmill.Plugins.Rss
  **/
 WMCommonRegistry::get("wmpluginsystem")->loadVelponClass("WMOutputter", "rss");
+
 class WMOutputterRss extends WMOutputterRssVelpon {
+
 	/**
 	 * printOutput
 	 *
@@ -19,22 +21,42 @@ class WMOutputterRss extends WMOutputterRssVelpon {
 	 * @return void
 	 **/
 	public function printOutput(WMDesignTemplate $dt, WMContentTemplate $ct, WMCollection $ufts, $encoding) {
-		$user = WMCommonRegistry::get("wmsession")->get("user")->getUser();
-		$os = WMCommonRegistry::get("wmserver")->getOperatingSystem()->getIdentifier();
-
-		if (WMCommonRegistry::get("wmtrigger")->hasTrigger("xml") && ($user instanceof WMLdapUser || (ini_get("windmill.error") === "0" || (!extension_loaded("windmill") && ($os === "windows") ) ) ) ) {
+		if (WMCommonRegistry::get("wmtrigger")->hasTrigger("xml", "debug") || WMCommonRegistry::get("wmtrigger")->hasTrigger("api", "protected") ) {
 			WMHeader::xmlData($this->outputDoc);
-			WMHeader::send();
+		}
+		elseif (WMCommonRegistry::get("wmtrigger")->hasTrigger("sqltime", "debug") ) {
+			var_dump(BasePeer::$time);
+			$this->endOutput();
 		}
 		else {
-			$parser = new WMDesignTemplateXSLParser("include");
-			$designTemplateManager = new WMDesignTemplateManager();
-			$rssdt = $designTemplateManager->getTemplate("rss");
-			$rss = $parser->parse($this->outputDoc, $rssdt->getXSLT(), $ct, true);
+			if (WMCommonRegistry::get("wmtrigger")->hasTrigger("timings", "debug") ) {
+				$beforeParsing = microtime(true);
+			}
+			$xhtml = $dt->apply($this->outputDoc, $ct);
 
-			WMHeader::xmlData($rss, "application/rss+xml");
-			WMHeader::send();
+			foreach ($ct->getAdditionalHeaders() as $header) {
+				WMHeader::sendHeader($header["type"], $header["value"]);
+			}
+			$contenttype = $ct->getContentType();
+			if (strpos($contenttype, "+xml") !== false || in_array($contenttype, array("text/xml", "application/xml") ) ) {
+				WMHeader::xmlData($xhtml, $ct->getContentType(), $encoding);
+			}
+			else {
+				$parser = new WMDesignTemplateXSLParser("include");
+				$designTemplateManager = new WMDesignTemplateManager();
+				$rssdt = $designTemplateManager->getTemplate("rss");
+				$rss = $parser->parse($this->outputDoc, $rssdt->getXSLT(), $ct, true);
+
+				WMHeader::xmlData($rss, "application/rss+xml");
+				WMHeader::send();
+			}
+			if (WMCommonRegistry::get("wmtrigger")->hasTrigger("timings", "debug") ) {
+				$afterParsing = microtime(true);
+				print "XSL Parsing took " . ($afterParsing - $beforeParsing) . " seconds<br/>";
+			}
 		}
+		$this->changeOutput(WMHeader::getData(), $ct->getContentType(), $encoding);
+		$this->sendOutput();
 	}
 
 }
