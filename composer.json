@@ -1,0 +1,43 @@
+{
+    "name": "connectholland/windmill-rss-plugin",
+    "description": "Windmill RSS plugin",
+    "type": "library",
+    "authors": [
+        {
+            "name": "Niels Nijens",
+            "email": "niels@connectholland.nl"
+        },
+        {
+            "name": "Reyo Stallenberg",
+            "email": "reyo@connectholland.nl"
+        },
+        {
+            "name": "Ron Rademaker",
+            "email": "ron@connectholland.nl"
+        },
+        {
+            "name": "Giso Stallenberg",
+            "email": "giso@connectholland.nl"
+        },
+        {
+            "name": "Arjen Smit",
+            "email": "arjem@connectholland.nl"
+        }
+    ],
+    "autoload": {
+        "classmap": [
+            "Framework/"
+        ]
+    },
+    "require": {},
+    "repositories": [
+        {
+            "type": "composer",
+            "url": "https://composer.packages.connectholland.nl"
+        }
+    ],
+    "require-dev": {
+        "connectholland/windmill": "^6.7",
+        "phpunit/phpunit": "^4.8"
+    }
+}
