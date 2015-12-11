@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wmconfiguration>
+    <windmill>
+        <environment>development</environment>
+        <errorhandling>
+            <error>0</error>
+        </errorhandling>
+    </windmill>
+</wmconfiguration>

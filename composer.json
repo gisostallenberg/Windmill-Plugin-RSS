@@ -29,5 +29,15 @@
             "Framework/"
         ]
     },
-    "require": {}
+    "require": {},
+    "repositories": [
+        {
+            "type": "composer",
+            "url": "https://composer.packages.connectholland.nl"
+        }
+    ],
+    "require-dev": {
+        "connectholland/windmill": "^6.7",
+        "phpunit/phpunit": "^4.8"
+    }
 }
